@@ -1,20 +1,24 @@
-from logging import PlaceHolder
 from secrets import choice
 import streamlit as st
-from PIL import Image
 import os
 import time
+import imagenet
+import utils
 import shutil
 
-def load_image(image_file):
-    img = Image.open(image_file)
-    return img
+#shutil.rmtree('./output', ignore_errors=True)
+#shutil.rmtree('./test_images', ignore_errors=True)
+#shutil.rmtree('./train_images', ignore_errors=True)
+#shutil.rmtree('./train_labels', ignore_errors=True)
 
-def compress_data():
-    os.remove('output.zip')
-    shutil.make_archive('output','zip','./test_images')
-    print('data compressed')
-
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
 
 def main():
     st.title("Multiple articulator segmentation")
@@ -53,7 +57,7 @@ def main():
 
         if train_image_files is not None:
             for train_image_file in train_image_files:
-                st.image(load_image(train_image_file),width=256)
+                st.image(utils.load_image(train_image_file),width=256)
                 #saving image
                 train_image_folder_name = 'train_images'
                 isExist = os.path.exists(train_image_folder_name)
@@ -69,7 +73,7 @@ def main():
 
         if train_image_files is not None:
             for train_image_file in train_image_files:
-                st.image(load_image(train_image_file),width=256)
+                st.image(utils.load_image(train_image_file),width=256)
                 #saving image
                 train_label_folder_name = 'train_labels'
                 isExist = os.path.exists(train_label_folder_name)
@@ -85,7 +89,7 @@ def main():
 
         if train_image_files is not None:
             for train_image_file in train_image_files:
-                st.image(load_image(train_image_file),width=256)
+                st.image(utils.load_image(train_image_file),width=256)
                 #saving image
                 test_images_folder_name = 'test_images'
                 isExist = os.path.exists(test_images_folder_name)
@@ -99,26 +103,24 @@ def main():
         placeholder_data_loader.empty()
         placeholder_heading.empty()
         st.subheader('Model inferencing')
-        st.progress(10)
-        st.subheader("wait the execution")
         with st.spinner('wait for it...'):
-            time.sleep(10)
+            imagenet.read_the_folder('test_images')
+            print('done')
 
     if train_button:
         placeholder_data_loader.empty()
         placeholder_heading.empty()
         st.subheader('Model training')
-        st.progress(10)
         st.subheader("wait the execution")
         with st.spinner('wait for it...'):
-            time.sleep(10)
-
+            time.sleep(5)
+            
     if zip_output:
         placeholder_data_loader.empty()
         placeholder_heading.empty()
         with st.spinner('Zipping output files'):
             time.sleep(5)
-            compress_data()
+            utils.compress_data()
 
 
 if __name__=='__main__':
