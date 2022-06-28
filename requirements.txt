@@ -1,0 +1,6 @@
+pandas
+streamlit
+Pillow
+tensorflow
+numpy
+scikit-image
