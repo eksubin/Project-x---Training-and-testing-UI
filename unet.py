@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from tensorflow.keras.models import load_model
 import numpy as np
 import os
@@ -21,7 +22,10 @@ COLOR_DICT = np.array([Sky, Building, Pole, Road, Pavement,
 
 model_loc = './ThreeLevel_CT_Inhouse_USC.hdf5'
 test_loc = './test_images'
-output_loc = './output'
+output_locA = './output_airway'
+output_locT = './output_tongue'
+output_locV = './output_velum'
+
 model = load_model(model_loc)
 
 def testGenerator(test_path,start_img_num,end_img_num,target_size = (256,256),flag_multi_class = False,as_gray = True):
@@ -49,7 +53,13 @@ def saveResult(save_path,npyfile,flag_multi_class = False,num_class = 2):
 #    for filename in os.listdir(folder):
 
 def unet_model():
-    test_generator = testGenerator(test_loc,0,5,target_size=(256,256))
-    output = model.predict_generator(test_generator,5,verbose=1)
-    saveResult(output_loc,output)
+    test_generatorA = testGenerator(test_loc,0,5,target_size=(256,256))
+    test_generatorT = testGenerator(test_loc,0,5,target_size=(256,256))
+    test_generatorV = testGenerator(test_loc,0,5,target_size=(256,256))
+    outputA = model.predict_generator(test_generatorA,5,verbose=1)
+    outputT = model.predict_generator(test_generatorT,5,verbose=1)
+    outputV = model.predict_generator(test_generatorV,5,verbose=1)
+    saveResult(output_locA,outputA)
+    saveResult(output_locT,outputT)
+    saveResult(output_locV,outputV)
 

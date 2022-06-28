@@ -5,12 +5,15 @@ import time
 import imagenet
 import utils
 import shutil
+import zipfile
 
 #shutil.rmtree('./output', ignore_errors=True)
 #shutil.rmtree('./test_images', ignore_errors=True)
 #shutil.rmtree('./train_images', ignore_errors=True)
 #shutil.rmtree('./train_labels', ignore_errors=True)
 
+#masking streamlit
+'''
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -19,6 +22,7 @@ hide_st_style = """
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
+'''
 
 def main():
     st.title("Multiple articulator segmentation")
@@ -41,6 +45,7 @@ def main():
     zip_file_root = 'output.zip'
     isZipExist = os.path.exists(zip_file_root)
     
+    ## download zipped files
     if isZipExist:
         with open("output.zip", "rb") as fp:
             download_output = st.sidebar.download_button(
@@ -120,7 +125,7 @@ def main():
         placeholder_heading.empty()
         with st.spinner('Zipping output files'):
             time.sleep(5)
-            utils.compress_data()
+            utils.compress_data(utils.output_folders,'output.zip')
 
 
 if __name__=='__main__':
