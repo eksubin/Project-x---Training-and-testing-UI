@@ -13,7 +13,7 @@ import zipfile
 #shutil.rmtree('./train_labels', ignore_errors=True)
 
 #masking streamlit
-'''
+
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -22,13 +22,14 @@ hide_st_style = """
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-'''
+
 
 def main():
     st.title("Multiple articulator segmentation")
     placeholder_heading = st.empty()
     placeholder_data_loader = st.empty()
     placeholder_sucess = st.empty()
+    placeholder_image = st.empty()
 
     menu = ['Train images', 'Train labels', 'Test images']
     choice = st.sidebar.selectbox("Data upload", menu)
@@ -65,7 +66,7 @@ def main():
 
         if train_image_files is not None:
             for train_image_file in train_image_files:
-                st.image(utils.load_image(train_image_file),width=256)
+                placeholder_image.image(utils.load_image(train_image_file),width=256)
                 #saving image
                 train_image_folder_name = 'train_images'
                 isExist = os.path.exists(train_image_folder_name)
@@ -76,12 +77,14 @@ def main():
                 placeholder_sucess.success("Files saved")
 
     if choice == 'Train labels':
+        placeholder_sucess.empty()
+        placeholder_image.empty()
         placeholder_heading.subheader('Upload train labels')
         train_image_files = placeholder_data_loader.file_uploader("", type=['png','jpg','jpeg'], accept_multiple_files=True)
 
         if train_image_files is not None:
             for train_image_file in train_image_files:
-                st.image(utils.load_image(train_image_file),width=256)
+                placeholder_image.image(utils.load_image(train_image_file),width=256)
                 #saving image
                 train_label_folder_name = 'train_labels'
                 isExist = os.path.exists(train_label_folder_name)
@@ -93,12 +96,13 @@ def main():
 
     if choice == ('Test images'):
         placeholder_sucess.empty()
+        placeholder_image.empty()
         placeholder_heading.subheader('Upload test images')
         train_image_files = placeholder_data_loader.file_uploader("", type=['png','jpg','jpeg'], accept_multiple_files=True)
 
         if train_image_files is not None:
             for train_image_file in train_image_files:
-                st.image(utils.load_image(train_image_file),width=256)
+                placeholder_image.image(utils.load_image(train_image_file),width=256)
                 #saving image
                 test_images_folder_name = 'test_images'
                 isExist = os.path.exists(test_images_folder_name)
@@ -112,6 +116,7 @@ def main():
         placeholder_data_loader.empty()
         placeholder_heading.empty()
         placeholder_sucess.empty()
+        placeholder_image.empty()
         st.subheader('Model inferencing')
         with st.spinner('wait for it...'):
             imagenet.read_the_folder('test_images')
@@ -122,6 +127,7 @@ def main():
         placeholder_data_loader.empty()
         placeholder_heading.empty()
         placeholder_sucess.empty()
+        placeholder_image.empty()
         st.subheader('Model training')
         st.subheader("wait the execution")
         with st.spinner('wait for it...'):
@@ -131,6 +137,7 @@ def main():
         placeholder_data_loader.empty()
         placeholder_heading.empty()
         placeholder_sucess.empty()
+        placeholder_image.empty()
         with st.spinner('Zipping output files'):
             time.sleep(5)
             utils.compress_data(utils.output_folders,'output.zip')
