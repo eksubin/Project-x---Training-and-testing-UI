@@ -20,13 +20,17 @@ Unlabelled = [0,0,0]
 COLOR_DICT = np.array([Sky, Building, Pole, Road, Pavement,
                           Tree, SignSymbol, Fence, Car, Pedestrian, Bicyclist, Unlabelled])
 
-model_loc = './ThreeLevel_CT_Inhouse_USC.hdf5'
+model_locA = './airway.hdf5'
+model_locT = './tongue.hdf5'
+model_locV = './velum.hdf5'
 test_loc = './test_images'
 output_locA = './output_airway'
 output_locT = './output_tongue'
 output_locV = './output_velum'
 
-model = load_model(model_loc)
+modelA = load_model(model_locA)
+modelT = load_model(model_locT)
+modelV = load_model(model_locV)
 
 def testGenerator(test_path,start_img_num,end_img_num,target_size = (256,256),flag_multi_class = False,as_gray = True):
     for i in range(start_img_num,end_img_num):
@@ -56,10 +60,9 @@ def unet_model():
     test_generatorA = testGenerator(test_loc,0,5,target_size=(256,256))
     test_generatorT = testGenerator(test_loc,0,5,target_size=(256,256))
     test_generatorV = testGenerator(test_loc,0,5,target_size=(256,256))
-    outputA = model.predict_generator(test_generatorA,5,verbose=1)
-    outputT = model.predict_generator(test_generatorT,5,verbose=1)
-    outputV = model.predict_generator(test_generatorV,5,verbose=1)
+    outputA = modelA.predict_generator(test_generatorA,5,verbose=1)
+    outputT = modelT.predict_generator(test_generatorT,5,verbose=1)
+    outputV = modelV.predict_generator(test_generatorV,5,verbose=1)
     saveResult(output_locA,outputA)
     saveResult(output_locT,outputT)
     saveResult(output_locV,outputV)
-

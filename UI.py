@@ -28,6 +28,8 @@ def main():
     st.title("Multiple articulator segmentation")
     placeholder_heading = st.empty()
     placeholder_data_loader = st.empty()
+    placeholder_sucess = st.empty()
+
     menu = ['Train images', 'Train labels', 'Test images']
     choice = st.sidebar.selectbox("Data upload", menu)
     gap = st.sidebar.text('')
@@ -58,6 +60,7 @@ def main():
 
     if choice == 'Train images':
         placeholder_heading.subheader('Upload train images')
+        placeholder_sucess.empty()
         train_image_files = placeholder_data_loader.file_uploader("", type=['png','jpg','jpeg'], accept_multiple_files=True)
 
         if train_image_files is not None:
@@ -70,7 +73,7 @@ def main():
                     os.makedirs(train_image_folder_name)
                 with open(os.path.join(train_image_folder_name,train_image_file.name),'wb') as f:
                     f.write((train_image_file).getbuffer())
-            #process_status = placeholder.success("Files saved")
+                placeholder_sucess.success("Files saved")
 
     if choice == 'Train labels':
         placeholder_heading.subheader('Upload train labels')
@@ -86,9 +89,10 @@ def main():
                     os.makedirs(train_label_folder_name)
                 with open(os.path.join(train_label_folder_name,train_image_file.name),'wb') as f:
                     f.write((train_image_file).getbuffer())
-            #placeholder.success("Files saved")
+            
 
     if choice == ('Test images'):
+        placeholder_sucess.empty()
         placeholder_heading.subheader('Upload test images')
         train_image_files = placeholder_data_loader.file_uploader("", type=['png','jpg','jpeg'], accept_multiple_files=True)
 
@@ -102,19 +106,22 @@ def main():
                     os.makedirs(test_images_folder_name)
                 with open(os.path.join(test_images_folder_name,train_image_file.name),'wb') as f:
                     f.write((train_image_file).getbuffer())
-            #placeholder.success("Files saved")
+                placeholder_sucess.success("Files saved")
 
     if inference_button:
         placeholder_data_loader.empty()
         placeholder_heading.empty()
+        placeholder_sucess.empty()
         st.subheader('Model inferencing')
         with st.spinner('wait for it...'):
             imagenet.read_the_folder('test_images')
             print('done')
+        placeholder_sucess.success('Model inferencing sucessful')
 
     if train_button:
         placeholder_data_loader.empty()
         placeholder_heading.empty()
+        placeholder_sucess.empty()
         st.subheader('Model training')
         st.subheader("wait the execution")
         with st.spinner('wait for it...'):
@@ -123,10 +130,11 @@ def main():
     if zip_output:
         placeholder_data_loader.empty()
         placeholder_heading.empty()
+        placeholder_sucess.empty()
         with st.spinner('Zipping output files'):
             time.sleep(5)
             utils.compress_data(utils.output_folders,'output.zip')
-
+        placeholder_sucess.success('Files zipped and ready to download')
 
 if __name__=='__main__':
     main()
