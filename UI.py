@@ -2,10 +2,7 @@ from secrets import choice
 import streamlit as st
 import os
 import time
-import imagenet
 import utils
-import shutil
-import zipfile
 
 #shutil.rmtree('./output', ignore_errors=True)
 #shutil.rmtree('./test_images', ignore_errors=True)
@@ -25,7 +22,7 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
 def main():
-    st.title("Multiple articulator segmentation")
+    st.title("Multiple Image segmentation")
     placeholder_heading = st.empty()
     placeholder_data_loader = st.empty()
     placeholder_sucess = st.empty()
@@ -119,7 +116,7 @@ def main():
         placeholder_image.empty()
         st.subheader('Model inferencing')
         with st.spinner('wait for it...'):
-            imagenet.read_the_folder('test_images')
+            utils.read_the_folder('test_images')
             print('done')
         placeholder_sucess.success('Model inferencing sucessful')
 
